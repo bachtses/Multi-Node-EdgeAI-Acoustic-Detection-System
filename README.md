@@ -1,37 +1,142 @@
 **Multi-Node-EdgeAI-Acoustic-Detection-System**
 
-A real-time, AI-powered acoustic detection system for identifying drones using distributed microphone arrays, edge computing (Raspberry Pi 5), and long-range wireless communication (LoRa). The system is designed to operate in outdoor environments with real-world noise and varying drone behaviors.
+## Overview
 
-**Features**
-1D Convolutional Neural Network (CNN) trained on real-world audio samples for binary classification (drone / no drone)
-ReSpeaker 4-Mic Arrays with Angle-of-Arrival (AoA) estimation
-Distributed Edge Nodes using Raspberry Pi 5 for real-time inference
-LoRa Communication for long-range, low-bandwidth wireless data transfer
-Fusion Aggregator for combining predictions from multiple nodes
-Central Node Dashboard with real-time spectrogram streaming and detection visualization (Flask-based)
-JSON-based API integration with external platforms for live event reporting
+This project presents a distributed acoustic surveillance system for real-time drone detection using edge AI and low-bandwidth communication.
+The system is designed to operate in environments where visual or radar-based detection is limited, leveraging the unique acoustic signature of UAVs.
+It consists of multiple edge nodes performing local inference, a central aggregator for fusion and decision-making, and a scalable architecture suitable for large-area monitoring.
 
-**System Components**
-Peripheral Nodes (Raspberry Pi + ReSpeaker + LoRa): Perform local inference and send detection metadata
-Aggregator Node: Gathers predictions, applies confidence fusion logic, and forwards results to the central node
-Central Node: Displays detections and streams spectrograms to UI / dashboard
-AI Model: Trained with MFCC features, 3×Conv1D layers, >95% accuracy on validation
 
-**Evaluation**
-Real-world field tested with over 6500 labeled audio samples
-Achieved F1 Score: 91.2%, Precision: 94.2%, Recall: 88.5%, and Accuracy: 90.2% during field deployment
-Tested with DJI Mavic 3 drone under varying distances, angles, and environmental noise
+## System Architecture
 
-**Repository Structure**
-/peripheral_node_raspberry.py     # Real-time inference node script
-/aggregator.py                    # Fusion node to combine predictions
-/central_node.py                  # Flask server for visualization and control
-/model_training/                  # Scripts for model training & preprocessing
-/model.tflite                     # Final converted TFLite model for edge inference
-/setup/                           # LoRa setup scripts and systemd autostart files
+The system follows a distributed architecture:
 
-**Installation & Deployment**
-Raspberry Pi OS + Python virtual environments
-Installing dependencies (librosa, tflite-runtime, etc.)
-LoRa module configuration and AT command automation
-Autostart on boot with systemd services
+- **Peripheral Nodes (Edge Devices)**
+  - Capture audio using multi-microphone arrays
+  - Perform real-time signal processing
+  - Run local AI inference (TensorFlow Lite)
+  - Estimate direction of arrival (AoA)
+  - Transmit detection events via LoRa
+
+- **Aggregator Node**
+  - Receives detections from all nodes
+  - Applies fusion logic and filtering
+  - Tracks node activity and system health
+  - Sends structured detection events to external APIs
+
+- **Central Node (Optional)**
+  - Provides visualization (Flask)
+  - Displays spectrograms and detections
+  - Acts as monitoring interface
+
+
+## Key Features
+
+- Real-time acoustic drone detection
+- Distributed edge AI inference (low latency)
+- LoRa-based long-range communication
+- Multi-node detection fusion
+- Direction of Arrival (AoA) estimation
+- Scalable architecture (plug-and-play nodes)
+- System health monitoring (CPU, RAM, temperature)
+- Low-cost hardware deployment
+
+
+## Signal Processing Pipeline
+
+Each node processes audio using:
+
+1. Audio acquisition (PyAudio)
+2. Multi-channel processing (ReSpeaker)
+3. Feature extraction:
+   - STFT
+   - Log-Mel Spectrogram
+4. AI inference (CNN model)
+5. AoA estimation (GCC-PHAT)
+6. Event generation (JSON)
+
+
+## AI Model
+
+- Input: Log-Mel Spectrogram (2 sec audio)
+- Architecture: 2D CNN
+- Task: Binary classification (Drone / No Drone)
+- Deployment: TensorFlow Lite (edge optimized)
+
+✔ Optimized for:
+- Real-time inference
+- Low computational cost
+- Robustness in noisy environments
+
+Model trained on:
+- Custom dataset (~16,000 samples)
+- Real-world outdoor recordings
+
+
+## Communication (LoRa)
+
+- Lightweight JSON messages (~40 bytes)
+- Includes:
+  - Node ID
+  - Detection label
+  - Confidence score
+  - AoA estimation
+  - Timestamp
+
+✔ Designed for:
+- Low bandwidth environments
+- Long-range communication
+- Energy efficiency
+
+
+## Hardware
+
+Each node includes:
+
+- Raspberry Pi 5
+- ReSpeaker 4-Mic Array
+- LoRa communication module
+- Power supply (battery or wired)
+
+Optimized for outdoor deployment
+
+
+## Software Components
+
+- `peripheral_node.py` → edge detection logic
+- `aggregator.py` → fusion + communication
+- `model.tflite` → deployed AI model
+- `lora.py` → communication module
+- `tuning.py` → configuration
+
+
+## System Capabilities
+
+- Multi-node spatial awareness
+- Detection validation via redundancy
+- Real-time monitoring of node status
+- Event-based detection logic (start/end events)
+- Robust operation in noisy environments
+
+
+## Experimental Setup
+
+- >12,000 labeled audio samples
+- Balanced dataset (Drone / Background)
+- Real-world recordings (wind, traffic, noise)
+- Field testing with DJI drones
+
+
+## How to Run
+
+### 1. Setup environment
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+### 2. Run peripheral node
+sudo venv/bin/python3 peripheral_node.py
+
+### 3. Run aggregator
+python3 aggregator.py
