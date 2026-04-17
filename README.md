@@ -119,7 +119,7 @@ Optimized for outdoor deployment
 
 ## Experimental Setup
 
-- >12,000 labeled audio samples
+- 12,000 labeled audio samples
 - Balanced dataset (Drone / Background)
 - Real-world recordings (wind, traffic, noise)
 - Field testing with DJI drones
@@ -127,14 +127,13 @@ Optimized for outdoor deployment
 
 ## How to Run
 
-1. Setup environment
-```bash
+Setup environment
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 
-2. Run peripheral node
+Run peripheral node
 sudo venv/bin/python3 peripheral_node.py
 
-3. Run aggregator
+Run aggregator
 python3 aggregator.py
