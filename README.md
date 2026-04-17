@@ -1,4 +1,4 @@
-**Multi-Node-EdgeAI-Acoustic-Detection-System**
+## Multi-Node-EdgeAI-Acoustic-Detection-System
 
 ## Overview
 
@@ -23,8 +23,6 @@ The system follows a distributed architecture:
   - Applies fusion logic and filtering
   - Tracks node activity and system health
   - Sends structured detection events to external APIs
-
-- **Central Node (Optional)**
   - Provides visualization (Flask)
   - Displays spectrograms and detections
   - Acts as monitoring interface
@@ -63,7 +61,7 @@ Each node processes audio using:
 - Task: Binary classification (Drone / No Drone)
 - Deployment: TensorFlow Lite (edge optimized)
 
-✔ Optimized for:
+Optimized for:
 - Real-time inference
 - Low computational cost
 - Robustness in noisy environments
@@ -83,7 +81,7 @@ Model trained on:
   - AoA estimation
   - Timestamp
 
-✔ Designed for:
+Designed for:
 - Low bandwidth environments
 - Long-range communication
 - Energy efficiency
@@ -129,14 +127,14 @@ Optimized for outdoor deployment
 
 ## How to Run
 
-### 1. Setup environment
+1. Setup environment
 ```bash
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 
-### 2. Run peripheral node
+2. Run peripheral node
 sudo venv/bin/python3 peripheral_node.py
 
-### 3. Run aggregator
+3. Run aggregator
 python3 aggregator.py
