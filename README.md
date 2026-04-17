@@ -1,4 +1,4 @@
-Multi-Node-EdgeAI-Acoustic-Detection-System
+**Multi-Node-EdgeAI-Acoustic-Detection-System**
 
 A real-time, AI-powered acoustic detection system for identifying drones using distributed microphone arrays, edge computing (Raspberry Pi 5), and long-range wireless communication (LoRa). The system is designed to operate in outdoor environments with real-world noise and varying drone behaviors.
 
